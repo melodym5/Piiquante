@@ -29,16 +29,16 @@ async function logUser(req, res) {
         res.status(403).send({ message: "Mot de passe incorrect"})
     }
     const token = createToken(email)
-    res.status(200).send({ userId: user?._id, token: token })
+    res.status(200).send({ userId: user._id, token: token })
     } catch (err) {
         console.error(err)
         res.status(500).send ({ message: "Erreur interne"})
     }
 }
 
-function createToken(email){
+function createToken(email) {
     const jwtPassword = process.env.JWT_PASSWORD
-    return jwt.sign({email: email}, jwtPassword, {expiresIn: "24h"})
+    return jwt.sign({ email: email }, jwtPassword, { expiresIn: "24h" })
 }
 
 module.exports = { createUser, logUser }
