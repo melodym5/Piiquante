@@ -2,16 +2,17 @@ const { User } = require("../mongo")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
-async function createUser(req,res) {
-    const { email, password } = req.body
-    const hashedPassword = await hashPassword(password)
-    const user = new User({ email, password: hashedPassword })
-        
-    user
-    .save()
-    .then(() => res.status(201).send({message:"Utilisateur enregistré !"}))
-    .catch((err) => res.status(409).send({message: "User pas enregistré :" + err}))  
-}
+async function createUser(req, res) {
+    try {
+      const { email, password } = req.body
+      const hashedPassword = await hashPassword(password)
+      const user = new User({ email, password: hashedPassword })
+      await user.save()
+      res.status(201).send({ message: "Utilisateur enregistré !" })
+    } catch (err) {
+      res.status(409).send({ message: "User pas enregistré :" + err })
+    }
+  }
 
 function hashPassword(password){
     const saltRounds = 10;
